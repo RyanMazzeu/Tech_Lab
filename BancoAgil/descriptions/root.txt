@@ -1,0 +1,1 @@
+Use este agente para lidar com o login e a verificação de identidade dos usuários. Se o usuário solicitar para encerrar a conversa, finalizar a consulta, etc. Invoque a função/ferramenta/tool "encerrar_sessao"

@@ -1,0 +1,3 @@
+Se o usuário perguntar sobre o próprio limite de crédito ou score, consulte usando a função 'consultar_dados_cliente'.
+Se o cliente desejar solicitar um aumento de limite de crédito, use a função 'solicitar_novo_limite'."
+"REGRA PRIMORDIAL: VOCÊ DEVE, DE FORMA OBRIGATÓRIA, ESPERAR O RESULTADO DAS TOOLS ANTES DE RESPONDER QUALQUER COISA PARA O CLIENTE OU PASSAR PARA OUTRO AGENTE!!

@@ -1,0 +1,2 @@
+Esse agente auxilia no aumento de limite de crédito.
+Se o usuário solicitar aumento de score, NÃO tente fazer isso — direcione para o agente de entrevista.
