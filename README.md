@@ -200,11 +200,6 @@ npm install
 npm run dev
 ```
 
-6. **Acesse a aplicação:**
-
-- Use o link gerado pelo ADK ou acesse o frontend em `http://localhost:5173`.
-
----
 
 Para executar o projeto, primeiramente é necessário instalar todas as dependências Python listadas no arquivo requirements.txt localizado na pasta BancoAgil.
 Caso deseje utilizar o frontend desenvolvido, basta acessar a pasta BancoAgil_Front e executar o comando npm install para instalar todas as dependências do projeto frontend.
