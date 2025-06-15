@@ -126,8 +126,53 @@ A espinha dorsal deste projeto é construída sobre o _Google Agents Development
 - descrições e instruções em arquivos separados (pasta descriptions e instructions).
 - Frontend básico usando o vite como acelerador.
 
-- #### Agent.py:
-  Nesse arquivo foi definido o agente autenticador
+- #### agent.py:
+
+  Esse é o núcleo do agente, sendo responsável por definir a sessão (conversa atual do agente, gerenciando memória, agentes, etc.) e o agente inicial, o autenticador (definido como root_agent para não sair do padrão definido pelo adk). O agente autenticador tem como sub-agentes (agentes que podem ser chamados à partir dele) o agente credito, cambio e entrevista, cada um com a sua devida especialização. O agente autenticador tem como ferramentas (funções python que ele pode invocar) a função autenticar_usuario, que recebe um cpf e uma data de nascimento e retorna os dados do usuário, permitindo assim que o agente possa autenticar pelo chat e passar o contexto para o agente mais adequado.
+
+  #### agent_cambio.py:
+
+  Arquivo responsável por definir o agente especializado em operações de câmbio.  
+  Nele, é implementada a lógica para consultar a cotação do dólar em tempo real, utilizando uma API externa.  
+  O agente recebe solicitações do agente principal, realiza a chamada à API e retorna a cotação atualizada ao usuário, garantindo respostas rápidas e precisas sobre valores de câmbio.
+
+  Principais pontos:
+
+  - Implementa a função de consulta de câmbio.
+  - Integração com APIs externas para obter a cotação do dólar.
+  - Retorna informações formatadas para o usuário final.
+  - Atua apenas quando acionado pelo agente principal, mantendo o escopo restrito a operações de câmbio.
+
+  #### agent_credito.py:
+
+  Arquivo responsável por definir o agente especializado em operações de crédito.
+
+  Nele, está implementada a lógica para:
+
+  - Consultar o limite de crédito atual do cliente, utilizando informações do arquivo `clientes.csv`.
+  - Registrar solicitações de aumento de limite em `solicitacoes_aumento_limite.csv`.
+  - Avaliar pedidos de aumento de limite com base no score do cliente, consultando o arquivo `score_limite.csv`.
+  - Aprovar ou rejeitar solicitações automaticamente, seguindo critérios definidos.
+  - Em caso de rejeição, oferecer ao cliente a opção de ser encaminhado ao Agente de Entrevista de Crédito para reavaliação.
+
+  Principais pontos:
+
+  - Centraliza todas as operações relacionadas a crédito.
+  - Garante que apenas clientes autenticados possam solicitar aumento de limite.
+
+  #### agent_entrevista.py:
+
+  Arquivo responsável por definir o agente especializado em entrevistas de crédito.
+
+  Neste módulo, o agente conduz uma entrevista estruturada com o cliente para coletar informações financeiras detalhadas, essenciais para recalcular o score de crédito. O fluxo da entrevista inclui perguntas sobre renda mensal, tipo de emprego, despesas fixas, número de dependentes e dívidas ativas. Com base nas respostas, o agente calcula um novo score (de 0 a 1000) e atualiza o arquivo `clientes.csv` com o valor revisado.
+
+  Principais pontos:
+
+  - Realiza perguntas de forma sequencial e clara, garantindo a coleta de todos os dados necessários.
+  - Valida as respostas fornecidas pelo cliente, solicitando correções em caso de inconsistências.
+  - Calcula o novo score de crédito utilizando critérios definidos no sistema.
+  - Atualiza o cadastro do cliente com o novo score, permitindo uma nova avaliação de crédito.
+  - Atua apenas quando acionado pelo agente de crédito, mantendo o escopo restrito à reavaliação de perfil financeiro.
 
 ---
 
@@ -158,7 +203,6 @@ GOOGLE_API_KEY=xxxx
 - [📚 Documentação dos Modelos Gemini](https://ai.google.dev/gemini-api/docs/models)
 - [✅ Lista de LLMs suportados pelo LiteLLM](https://docs.litellm.ai/docs/providers/)
 
-
 <a id="como-rodar-a-aplicacao"></a>
 
 ## 🔗 Como rodar a Aplicação
@@ -185,7 +229,7 @@ pip install -r requirements.txt
 
 - Para testes com a ferramenta nativa do ADK:
   ```bash
-  adk web
+  adk web (no mesmo diretorio que os diretórios BancoAgil e BancoAgil_Front)
   ```
 - Para rodar o servidor de API:
   ```bash
@@ -200,30 +244,27 @@ npm install
 npm run dev
 ```
 
-
 Para executar o projeto, primeiramente é necessário instalar todas as dependências Python listadas no arquivo requirements.txt localizado na pasta BancoAgil.
 Caso deseje utilizar o frontend desenvolvido, basta acessar a pasta BancoAgil_Front e executar o comando npm install para instalar todas as dependências do projeto frontend.
 Como o sistema foi desenvolvido utilizando o Google Agents Development Kit (ADK), a forma mais prática de realizar testes é por meio da ferramenta nativa do ADK. Para isso, basta executar o comando adk web na raiz do projeto, que irá disponibilizar um link com o agente “BancoAgil” ativo. Essa ferramenta permite visualizar e depurar todo o fluxo de atendimento do agente, facilitando o processo de desenvolvimento.
 Para rodar a aplicação integrada com o frontend, é necessário iniciar o servidor backend, que é responsável por iniciar o agente e processar as requisições via API. Em paralelo, deve-se executar o comando npm i para instalar as dependencias do projeto e npm run dev dentro da pasta BancoAgil_Front para iniciar o servidor de desenvolvimento do frontend.
 
-
 ## Funcionamento pelo ADK WEB:
 
 É de suma importância lembrar que para rodar com o adk WEB é necessário alterar as insportações do agent.py, adicionando um "." no inicio, exemplo:
 
-from .agents.agente_cambio import create_exchange_agent  # type: ignore
+from .agents.agente_cambio import create_exchange_agent # type: ignore
 
-from .agents.agente_credito import create_credit_agent  # type: ignore
+from .agents.agente_credito import create_credit_agent # type: ignore
 
-from .agents.agente_entrevista import create_interview_agent  # type: ignore
-
+from .agents.agente_entrevista import create_interview_agent # type: ignore
 
 ## Funcionamento pelo server:
 
 É de suma importância lembrar que para rodar com o frontend, ou seja, gerando uma api para acessar o agente via requisição web, é necessário alterar as insportações do agent.py, removendo "." no inicio, exemplo:
 
-from agents.agente_cambio import create_exchange_agent  # type: ignore
+from agents.agente_cambio import create_exchange_agent # type: ignore
 
-from agents.agente_credito import create_credit_agent  # type: ignore
+from agents.agente_credito import create_credit_agent # type: ignore
 
-from agents.agente_entrevista import create_interview_agent  # type: ignore
+from agents.agente_entrevista import create_interview_agent # type: ignore
