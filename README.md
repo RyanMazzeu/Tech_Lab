@@ -143,7 +143,7 @@ Para este projeto, utilizei _APIs gratuitas, como o \*\*Mistral_.
 
 ### ✅ Variáveis necessárias (.env)
 
-Crie um arquivo chamado .env no mesmo diretório do server.py com o seguinte conteúdo:
+Crie um arquivo chamado .env no mesmo diretório do server.py (BancoAgil) com o seguinte conteúdo:
 
 MISTRAL_API_KEY=xxxx  
 TAVILY_API_KEY=xxxx  
@@ -151,11 +151,13 @@ GOOGLE_API_KEY=xxxx
 
 ### 📌 Links úteis para gerar suas API Keys:
 
+- [🔑 Obter API Key do Tavily](https://app.tavily.com/home)
 - [🔑 Obter API Key do Mistral](https://console.mistral.ai/api-keys)
 - [📈 Tabela de Preços do Mistral](https://mistral.ai/pricing#api-pricing)
 - [🔑 Gerar API Key do Google Gemini](https://aistudio.google.com/app/apikey)
 - [📚 Documentação dos Modelos Gemini](https://ai.google.dev/gemini-api/docs/models)
 - [✅ Lista de LLMs suportados pelo LiteLLM](https://docs.litellm.ai/docs/providers/)
+
 
 <a id="como-rodar-a-aplicacao"></a>
 
@@ -220,8 +222,6 @@ from .agents.agente_credito import create_credit_agent  # type: ignore
 
 from .agents.agente_entrevista import create_interview_agent  # type: ignore
 
-
-![alt text](image.png)![alt text](image-1.png)
 
 ## Funcionamento pelo server:
 
