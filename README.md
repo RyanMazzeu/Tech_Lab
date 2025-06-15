@@ -2,16 +2,15 @@
 
 ![image](https://github.com/user-attachments/assets/dd9dcd0c-c51d-4398-b353-1a3dcbefacf6)
 
-Um agente de IA conversacional para o banco fictício _Banco Ágil, construído com o \*\*Google Agents Development Kit (ADK)_ e _modelos de linguagem avançados (LLMs)_.  
+Um agente de IA conversacional para o banco fictício _Banco Ágil, construído com o Google Agents Development Kit (ADK)_ e _modelos de linguagem avançados (LLMs)_.  
 O agente é capaz de autenticar clientes, analisar pedidos de crédito, realizar cotações de câmbio e conduzir entrevistas para coleta de dados.
 
 ---
 
 ## 🗂️ Sumário
+[Desafio Proposto](#desafio-proposto)
 
 [📄 Visão Geral do Projeto](#visao-geral-do-projeto)
-
-[🏛️ Arquitetura do Sistema](#arquitetura-do-sistema)
 
 [🔑 Configuração de APIs](#configuracao-de-apis)
 
@@ -93,26 +92,25 @@ Cada agente tem uma função específica, e o atendimento simula uma interação
 
 ## 📄 Visão Geral do Projeto
 
-Este projeto é uma solução para o _"Desafio Técnico: Agente Bancário Inteligente", que visa criar um sistema de atendimento ao cliente para um banco digital fictício, o \*\*Banco Ágil_.
+Este projeto foi desenvolvido como solução para o Desafio Técnico: Agente Bancário Inteligente, que propõe a criação de um sistema de atendimento virtual para um banco digital fictício, o Banco Ágil.
 
-A solução utiliza o _Google ADK_, um framework para desenvolver e implementar agentes de IA.  
-O sistema interpreta as intenções do cliente e aciona as ferramentas e subagentes apropriados para cada tarefa, simulando um time de especialistas em:
+A proposta consiste em construir um agente inteligente capaz de compreender as intenções do cliente e acionar, de forma autônoma, os subagentes e ferramentas necessárias para resolver diferentes demandas bancárias.
 
-- _Crédito_
-- _Câmbio_
-- _Entrevistas_
+A arquitetura foi construída utilizando o Google Agents Development Kit (ADK), um framework para desenvolvimento de agentes inteligentes modulares e escaláveis.
 
----
+O sistema simula um time de especialistas, cada um responsável por uma área específica do atendimento bancário:
 
-<a id="arquitetura-do-sistema"></a>
+💳 Crédito — Consultas de limite e solicitações de aumento.
 
-## 🏛️ Arquitetura do Sistema
+💱 Câmbio — Consultas de cotação do dólar em tempo real.
 
-A espinha dorsal deste projeto é construída sobre o _Google Agents Development Kit (ADK)_, que permite a criação de sistemas de agentes complexos e modulares.
+🤝 Entrevistas de Crédito — Reavaliação de perfil financeiro por meio de entrevistas guiadas.
+
+O agente principal atua como um orquestrador, interpretando os comandos do usuário e encaminhando a solicitação ao agente ou ferramenta mais adequada.
 
 ### Estrutura Geral:
 
-![alt text](image-3.png)
+![image](https://github.com/user-attachments/assets/e56f2dda-2417-445a-847c-2d399d550219)
 
 - Um _agente principal (root_agent)_ que orquestra a interação.
 - Vários _subagentes especialistas_ para tarefas específicas.
@@ -276,49 +274,65 @@ from agents.agente_entrevista import create_interview_agent # type: ignore
 ### 1. Autenticação de Cliente (Agente de Triagem)
 
 - [✔️] Cliente fornece CPF e data de nascimento válidos e é autenticado com sucesso.
-  ![alt text](image-2.png)
+![image](https://github.com/user-attachments/assets/5343fd51-99a0-4ea2-98a7-4e1711f3a935)
+
 
 - [✔️] Cliente fornece CPF ou data de nascimento inválidos e recebe mensagem de erro.
-  ![alt text](image-1.png)
+![image](https://github.com/user-attachments/assets/e5d0d59d-aec5-41dc-9b78-eb95e41d38b4)
+
 - [❌] Cliente falha na autenticação 3 vezes e o atendimento é encerrado. Não encontrei ferramentas que permitam ao próprio ADK encerrar a sessão definitivamente pelo chat. Portanto, não consegui cumprir esse objetivo diretamente. No entanto, no frontend, adicionei um botão de encerrar sessão que funciona corretamente.
-  ![alt text](image.png)
+![image](https://github.com/user-attachments/assets/1cc28ea5-9a36-4dfd-b4c6-6997c148230f)
+
 
 ### 2. Consulta de Limite de Crédito (Agente de Crédito)
 
 - [✔️] Cliente autenticado solicita consulta de limite de crédito e recebe o valor correto.
-  ![alt text](image-5.png)
+  ![image](https://github.com/user-attachments/assets/6321c488-b7d9-4068-9b0f-3f66f807bf9c)
+
 - [✔️] Cliente não autenticado tenta consultar limite e é impedido.
-  ![alt text](image-4.png)
+  ![image](https://github.com/user-attachments/assets/68561b9f-1add-4349-abda-dbefa1fbdd2f)
+
 
 ### 3. Solicitação de Aumento de Limite (Agente de Crédito)
 
 - [✔️] Cliente autenticado solicita aumento de limite e pedido é registrado em `solicitacoes_aumento_limite.csv`.
-  ![alt text](image-8.png)
-  ![alt text](image-9.png)
-  ![alt text](image-10.png)
+![image](https://github.com/user-attachments/assets/57e60b01-3382-41fe-8748-239fdd5ddb1b)
+![image](https://github.com/user-attachments/assets/31a41eda-d175-4f87-828d-ec1ecb213715)
+![image](https://github.com/user-attachments/assets/da6acc2b-918d-42d9-b1ae-10ced9de37cd)
+
 - [✔️] Pedido de aumento é aprovado automaticamente (score suficiente).
-  ![alt text](image-6.png)![alt text](image-7.png)
+![image](https://github.com/user-attachments/assets/74932e10-21ed-42b7-be07-e5d1fc2e9a0f)
+![image](https://github.com/user-attachments/assets/a6622b6f-1127-4ccf-b851-0b257f2f3b52)
+
 - [✔️] Pedido de aumento é rejeitado automaticamente (score insuficiente).
-  ![alt text](image-11.png)
+![image](https://github.com/user-attachments/assets/c8b4a754-925c-4d12-87c7-6324dd1be306)
+
 - [✔️] Após rejeição, cliente é convidado a participar da entrevista de crédito.
-  ![alt text](image-18.png)
+![image](https://github.com/user-attachments/assets/948359d3-5c4d-428b-846d-63df195992c2)
+
 
 ### 4. Entrevista de Crédito (Agente de Entrevista)
 
 - [✔️] Cliente aceita participar da entrevista após rejeição do aumento de limite.
-  ![alt text](image-12.png)
-  ![alt text](image-20.png)
-  ![alt text](image-21.png)
-  ![alt text](image-22.png)
+![image](https://github.com/user-attachments/assets/1ce99377-0c64-4717-afc8-f21be231556d)
+![image](https://github.com/user-attachments/assets/90191160-f09e-47b8-ab86-60ed8250b25b)
+![image](https://github.com/user-attachments/assets/475fc403-4f1c-402b-bbeb-67474a3cf313)
+
 - [✔️] Todas as perguntas da entrevista são feitas (renda, emprego, despesas, dependentes, dívidas).
-  ![alt text](image-23.png)
+![image](https://github.com/user-attachments/assets/0a665d3c-9631-4d60-98a0-5a3cdbfe0839)
+
 - [✔️] Novo score é calculado corretamente e atualizado em `clientes.csv`.
-  ![alt text](image-24.png)
+![image](https://github.com/user-attachments/assets/0a9dce58-0d26-41b9-85f2-b33ba37477e1)
+
+![image](https://github.com/user-attachments/assets/762790b7-0c8e-4460-bec6-f360f4196e9a)
+
+
 
 ### 5. Consulta de Câmbio (Agente de Câmbio)
 
 - [✔️] Cliente autenticado solicita cotação do dólar e recebe valor atualizado da API externa.
-  ![alt text](image-25.png)
+![image](https://github.com/user-attachments/assets/7dd1e4a4-7cfb-450a-9de2-1e056fdac13f)
+
 
 ### 6. Fluxo de Atendimento Único
 
@@ -334,4 +348,4 @@ from agents.agente_entrevista import create_interview_agent # type: ignore
 
 - [✔️] Frontend comunica corretamente com o backend.
 - [✔️] Mensagens e fluxos são exibidos corretamente ao usuário.
-![alt text](image-26.png)
+![image](https://github.com/user-attachments/assets/8e991017-2f85-4e47-bfc4-40f9f5e7d6fe)
