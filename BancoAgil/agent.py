@@ -13,9 +13,9 @@ from google.adk.tools import FunctionTool, agent_tool
 from google.adk.models.lite_llm import LiteLlm
 
 # .agents para rodar com adk web e agents para rodar com server
-from .agents.agente_cambio import create_exchange_agent  # type: ignore
-from .agents.agente_credito import create_credit_agent  # type: ignore
-from .agents.agente_entrevista import create_interview_agent  # type: ignore
+from agents.agente_cambio import create_exchange_agent  # type: ignore
+from agents.agente_credito import create_credit_agent  # type: ignore
+from agents.agente_entrevista import create_interview_agent  # type: ignore
 
 load_dotenv()
 APP_NAME = "BancoAgil"

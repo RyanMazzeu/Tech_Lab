@@ -112,6 +112,8 @@ A espinha dorsal deste projeto é construída sobre o _Google Agents Development
 
 ### Estrutura Geral:
 
+![alt text](image-3.png)
+
 - Um _agente principal (root_agent)_ que orquestra a interação.
 - Vários _subagentes especialistas_ para tarefas específicas.
 - Integração com _diferentes LLMs_ via _LiteLLM_.
@@ -268,3 +270,68 @@ from agents.agente_cambio import create_exchange_agent # type: ignore
 from agents.agente_credito import create_credit_agent # type: ignore
 
 from agents.agente_entrevista import create_interview_agent # type: ignore
+
+## Testes:
+
+### 1. Autenticação de Cliente (Agente de Triagem)
+
+- [✔️] Cliente fornece CPF e data de nascimento válidos e é autenticado com sucesso.
+  ![alt text](image-2.png)
+
+- [✔️] Cliente fornece CPF ou data de nascimento inválidos e recebe mensagem de erro.
+  ![alt text](image-1.png)
+- [❌] Cliente falha na autenticação 3 vezes e o atendimento é encerrado. Não encontrei ferramentas que permitam ao próprio ADK encerrar a sessão definitivamente pelo chat. Portanto, não consegui cumprir esse objetivo diretamente. No entanto, no frontend, adicionei um botão de encerrar sessão que funciona corretamente.
+  ![alt text](image.png)
+
+### 2. Consulta de Limite de Crédito (Agente de Crédito)
+
+- [✔️] Cliente autenticado solicita consulta de limite de crédito e recebe o valor correto.
+  ![alt text](image-5.png)
+- [✔️] Cliente não autenticado tenta consultar limite e é impedido.
+  ![alt text](image-4.png)
+
+### 3. Solicitação de Aumento de Limite (Agente de Crédito)
+
+- [✔️] Cliente autenticado solicita aumento de limite e pedido é registrado em `solicitacoes_aumento_limite.csv`.
+  ![alt text](image-8.png)
+  ![alt text](image-9.png)
+  ![alt text](image-10.png)
+- [✔️] Pedido de aumento é aprovado automaticamente (score suficiente).
+  ![alt text](image-6.png)![alt text](image-7.png)
+- [✔️] Pedido de aumento é rejeitado automaticamente (score insuficiente).
+  ![alt text](image-11.png)
+- [✔️] Após rejeição, cliente é convidado a participar da entrevista de crédito.
+  ![alt text](image-18.png)
+
+### 4. Entrevista de Crédito (Agente de Entrevista)
+
+- [✔️] Cliente aceita participar da entrevista após rejeição do aumento de limite.
+  ![alt text](image-12.png)
+  ![alt text](image-20.png)
+  ![alt text](image-21.png)
+  ![alt text](image-22.png)
+- [✔️] Todas as perguntas da entrevista são feitas (renda, emprego, despesas, dependentes, dívidas).
+  ![alt text](image-23.png)
+- [✔️] Novo score é calculado corretamente e atualizado em `clientes.csv`.
+  ![alt text](image-24.png)
+
+### 5. Consulta de Câmbio (Agente de Câmbio)
+
+- [✔️] Cliente autenticado solicita cotação do dólar e recebe valor atualizado da API externa.
+  ![alt text](image-25.png)
+
+### 6. Fluxo de Atendimento Único
+
+- [✔️] O atendimento é conduzido de forma única, mesmo com múltiplos agentes atuando.
+- [❌] O agente não deve falar que transferiu para outro agente.
+- [✔️] O contexto do cliente é mantido entre os agentes.
+
+### 7. Controle de Escopo dos Agentes
+
+- [✔️] Cada agente só executa funções dentro do seu escopo (ex: agente de câmbio não acessa dados de crédito).
+
+### 8. Frontend
+
+- [✔️] Frontend comunica corretamente com o backend.
+- [✔️] Mensagens e fluxos são exibidos corretamente ao usuário.
+![alt text](image-26.png)
